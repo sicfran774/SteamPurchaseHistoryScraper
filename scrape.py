@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import sys
 import re
 import ast
+import time
 
 def run():
     args = sys.argv[1:]
@@ -27,7 +28,11 @@ def run():
         # options.add_argument(f"--user-data-dir={userdatadir}")
 
         driver.get(URL)
-        input("Login to Steam and expand all data. Enter to continue")
+        input("Login to Steam. Press Enter to continue")
+        print("Waiting for page to load...")
+
+        driver.find_element("id","load_more_button").click()
+        time.sleep(3) # Wait for other items to load after clicking load more
 
         html = driver.page_source
         soup = BeautifulSoup(html, "html.parser")
@@ -47,7 +52,7 @@ def run():
                     temp[i] = re.sub('[\t\n]', '', temp[i])
             purchases.append(temp)
 
-        save = input("Save this information for later? (Y or N)")
+        save = input("Save this information to text file? (Y or N) ")
         if save.lower() == 'y':
             name = name.text.strip()
             data = open(f"{name}.txt", "w")
@@ -75,8 +80,8 @@ def run():
 
     print(f"Total spent: ${round(totalSpent, 2)}")
 
-    print("Type -1 to quit")
     while(True):
+        print("\nType -1 to quit")
         query = input("Query: ")
         if query == "-1":
             break
@@ -85,7 +90,7 @@ def run():
             priceOfThat = 0
             items = []
             for i in purchases:
-                if query.lower() in i[1].lower():
+                if query and query.lower() in i[1].lower():
                     count += 1
                     items.append(i)
                     amount = float(re.sub('[$,Credit]', '', i[3]))
@@ -95,7 +100,7 @@ def run():
                         priceOfThat += amount
             for i in items:
                 print(i)
-            print(f"There were {count} instances of {query}")
+            print(f"\nThere were {count} instances of {query}")
             print(f"In total, it was ${round(priceOfThat, 2)}")
 
 if __name__ == "__main__":
