@@ -5,7 +5,7 @@ Note: This uses ChromeDriver with Selenium. You may need to install Google Chrom
 
 ## How to use
 
-1. Create and activate a Python virtual environment and install the necessary packages (BeautifulSoup4, Selenium for ChromeDriver)
+1. Create and activate a [Python virtual environment](https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments) and install the necessary packages (BeautifulSoup4, Selenium for ChromeDriver)
 
 ```
 python -m pip install bs4 selenium
